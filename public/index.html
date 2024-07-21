@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview Test</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      #chart {
+        max-width: 430px;
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header body-regular-14">
+      <div class="header-container flex-row">
+        <img src="assets/TestLogo.svg" class="logo" alt="Test Logo" />
+        <nav class="center flex-row">
+          <ul class="nav-list flex-row center">
+            <li class="nav-item flex-row">
+              <img src="assets/homeIcon.svg" alt="Home Icon" />
+              <h5>Home</h5>
+            </li>
+            <li class="nav-item flex-row">
+              <img src="assets/patientsIcon.svg" alt="Patients Icon" />
+              <h5>Patients</h5>
+            </li>
+            <li class="nav-item flex-row">
+              <img src="assets/calenderIcon.svg" alt="Schedule Icon" />
+              <h5>Schedule</h5>
+            </li>
+            <li class="nav-item flex-row">
+              <img src="assets/chatIcon.svg" alt="Message Icon" />
+              <h5>Message</h5>
+            </li>
+            <li class="nav-item flex-row">
+              <img src="assets/cardIcon.svg" alt="Transactions Icon" />
+              <h5>Transactions</h5>
+            </li>
+          </ul>
+        </nav>
+        <div class="user-settings flex-row">
+          <img
+            src="assets/profilewomansmall.png"
+            class="user-image"
+            alt="User Image"
+          />
+          <div class="user-info flex-col">
+            <h5>Dr. Jose Simmon</h5>
+            <h5>General Practitioner</h5>
+          </div>
+          <hr class="vertical-divider" />
+          <div class="settings-icons flex-row">
+            <img
+              src="assets/settingssmall.png"
+              class="settings-icon"
+              alt="Settings"
+            />
+            <img
+              src="assets/moreverticalsmall.png"
+              class="more-icon"
+              alt="More Options"
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <section class="patients-section card-title-24pt">
+        <div class="section-header flex-row">
+          <h3>Patients</h3>
+          <img src="assets/searchsmall.png" class="search-icon" alt="Search" />
+        </div>
+        <div class="patients-list-container">
+          <ul
+            id="patients-list"
+            class="patients-list body-emphasized-14pt"
+          ></ul>
+        </div>
+      </section>
+      <section class="diagnosis-section flex-col card-title-24pt">
+        <div class="diagnosis-history">
+          <h3>Diagnosis History</h3>
+          <div class="chart-section flex-row">
+            <div class="blood-pressure-chart">
+              <div class="chart-label flex-row">
+                <h4 class="inner-card-title-18pt">Blood Pressure</h4>
+                <p class="body-regular-14">
+                  Last 6 months
+                  <span><img src="assets/expandsmall.png" alt="Expand" /></span>
+                </p>
+              </div>
+              <canvas id="chart"></canvas>
+            </div>
+            <div class="blood-pressure-info body-regular-14">
+              <div class="blood-pressure-item">
+                <h2 class="systolic-text flex-row">
+                  <span class="circle"></span>Systolic
+                </h2>
+                <p class="systolic-value">160</p>
+                <p class="systolic-status flex-row">
+                  <span><img src="assets/ArrowUp.png" alt="Arrow Up" /></span
+                  >Higher than average
+                </p>
+              </div>
+              <div class="blood-pressure-item">
+                <h2 class="diastolic-text flex-row">
+                  <span class="circle" style="background: #8c6fe6"></span
+                  >Diastolic
+                </h2>
+                <p class="diastolic-value">78</p>
+                <p class="diastolic-status flex-row">
+                  <span
+                    ><img src="assets/ArrowDown.png" alt="Arrow Down" /></span
+                  >Lower than average
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="other-health-results-container">
+            <div class="other-health-results" id="other-health-results"></div>
+          </div>
+        </div>
+        
+        <div class="diagnosis-list">
+          <h3>Diagnosis List</h3>
+          <div class="diagnosis-table-container">
+            <table id="diagnosis-table"></table>
+          </div>
+        </div>
+      </section>
+      <section class="patient-info-section">
+        <div class="jessica-info" id="jessica-info"></div>
+        <div class="lab-results">
+          <h3 class="card-title-24pt">Lab Results</h3>
+          <ul
+            class="lab-results-list body-regular-14"
+            id="lab-results-list"
+          ></ul>
+        </div>
+      </section>
+    </main>
+    <script type="module">
+      import { fetchAuthToken } from "./auth.js";
+      import { fetchPatientData } from "./fetchPatientData.js";
+      import { fetchDiagnosisData } from "./fetchDiagnosisData.js";
+      import { bloodPressureChart } from "./chart.js";
+      import { fetchDiagnosisList } from "./fetchDiagnosisList.js";
+      import { fetchJessicaInfo } from "./fetchJessicaInfo.js";
+      import { fetchLabResults } from "./fetchLabResults.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchAuthToken()
+          .then((authToken) => {
+            fetchPatientData(authToken);
+            fetchDiagnosisData(authToken);
+            fetchDiagnosisList(authToken);
+            fetchJessicaInfo(authToken);
+            fetchLabResults(authToken);
+          })
+          .catch((error) => console.error("Error fetching auth token:", error));
+        bloodPressureChart();
+      });
+    </script>
+  </body>
+</html>
